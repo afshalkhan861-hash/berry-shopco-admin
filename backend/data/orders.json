@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ORD-9901",
+    "customer": "Afshal Khan",
+    "items": "T-Shirt With Tape Details (x1)",
+    "total": 120,
+    "status": "Delivered",
+    "date": "2026-09-12"
+  },
+  {
+    "id": "ORD-9902",
+    "customer": "Ali Raza",
+    "items": "Skinny Fit Jeans (x2)",
+    "total": 480,
+    "status": "Processing",
+    "date": "2026-09-13"
+  },
+  {
+    "id": "ORD-9903",
+    "customer": "Hamza Ahmed",
+    "items": "Checkered Shirt (x1)",
+    "total": 180,
+    "status": "Shipped",
+    "date": "2026-09-13"
+  }
+]

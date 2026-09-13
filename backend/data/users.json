@@ -1,0 +1,23 @@
+[
+  {
+    "id": "USR-01",
+    "name": "Afshal Khan",
+    "email": "afshal@gmail.com",
+    "role": "Customer",
+    "orders": 3
+  },
+  {
+    "id": "USR-02",
+    "name": "Ali Raza",
+    "email": "ali@gmail.com",
+    "role": "Customer",
+    "orders": 1
+  },
+  {
+    "id": "USR-03",
+    "name": "Hamza Ahmed",
+    "email": "hamza@gmail.com",
+    "role": "Customer",
+    "orders": 2
+  }
+]

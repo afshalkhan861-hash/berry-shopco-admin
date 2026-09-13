@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "name": "T-Shirt With Tape Details",
+    "price": 120,
+    "category": "T-Shirts",
+    "stock": 45,
+    "image": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500"
+  },
+  {
+    "id": "2",
+    "name": "Skinny Fit Jeans",
+    "price": 240,
+    "category": "Jeans",
+    "stock": 28,
+    "image": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500"
+  },
+  {
+    "id": "3",
+    "name": "Checkered Shirt",
+    "price": 180,
+    "category": "Shirts",
+    "stock": 15,
+    "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500"
+  },
+  {
+    "id": "4",
+    "name": "Sleeve Striped T-Shirt",
+    "price": 130,
+    "category": "T-Shirts",
+    "stock": 32,
+    "image": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500"
+  }
+]
