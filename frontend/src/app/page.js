@@ -2,41 +2,70 @@
 import React, { useState, useEffect } from "react";
 import { LayoutDashboard, ShoppingBag, ShoppingCart, Users, Plus, Trash2, Package } from "lucide-react";
 
+const INITIAL_PRODUCTS = [
+  { id: "1", name: "T-Shirt With Tape Details", price: 120, category: "T-Shirts", stock: 45, image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500" },
+  { id: "2", name: "Skinny Fit Jeans", price: 240, category: "Jeans", stock: 28, image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500" },
+  { id: "3", name: "Checkered Shirt", price: 180, category: "Shirts", stock: 15, image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500" },
+  { id: "4", name: "Sleeve Striped T-Shirt", price: 130, category: "T-Shirts", stock: 32, image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500" }
+];
+
+const INITIAL_ORDERS = [
+  { id: "ORD-9901", customer: "Afshal Khan", items: "T-Shirt With Tape Details (x1)", total: 120, status: "Delivered", date: "2026-09-12" },
+  { id: "ORD-9902", customer: "Ali Raza", items: "Skinny Fit Jeans (x2)", total: 480, status: "Processing", date: "2026-09-13" },
+  { id: "ORD-9903", customer: "Hamza Ahmed", items: "Checkered Shirt (x1)", total: 180, status: "Shipped", date: "2026-09-13" }
+];
+
+const INITIAL_USERS = [
+  { id: "USR-01", name: "Afshal Khan", email: "afshal@gmail.com", role: "Customer", orders: 3 },
+  { id: "USR-02", name: "Ali Raza", email: "ali@gmail.com", role: "Customer", orders: 1 },
+  { id: "USR-03", name: "Hamza Ahmed", email: "hamza@gmail.com", role: "Customer", orders: 2 }
+];
+
 export default function ShopCoAdmin() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [products, setProducts] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState(INITIAL_PRODUCTS);
+  const [orders, setOrders] = useState(INITIAL_ORDERS);
+  const [users, setUsers] = useState(INITIAL_USERS);
   const [form, setForm] = useState({ name: "", price: "", category: "T-Shirts", stock: "20" });
   const [imageFile, setImageFile] = useState(null);
 
   const fetchAll = () => {
-    fetch("http://localhost:5000/api/products").then(res => res.json()).then(setProducts);
-    fetch("http://localhost:5000/api/orders").then(res => res.json()).then(setOrders);
-    fetch("http://localhost:5000/api/users").then(res => res.json()).then(setUsers);
+    fetch("http://localhost:5000/api/products")
+      .then(res => res.json())
+      .then(data => { if(Array.isArray(data) && data.length > 0) setProducts(data); })
+      .catch(() => {});
+
+    fetch("http://localhost:5000/api/orders")
+      .then(res => res.json())
+      .then(data => { if(Array.isArray(data) && data.length > 0) setOrders(data); })
+      .catch(() => {});
+
+    fetch("http://localhost:5000/api/users")
+      .then(res => res.json())
+      .then(data => { if(Array.isArray(data) && data.length > 0) setUsers(data); })
+      .catch(() => {});
   };
 
   useEffect(() => { fetchAll(); }, []);
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", form.name);
-    formData.append("price", form.price);
-    formData.append("category", form.category);
-    formData.append("stock", form.stock);
-    if (imageFile) formData.append("image", imageFile);
-
-    await fetch("http://localhost:5000/api/products", { method: "POST", body: formData });
+    const newP = {
+      id: Date.now().toString(),
+      name: form.name,
+      price: Number(form.price),
+      category: form.category,
+      stock: Number(form.stock),
+      image: imageFile ? URL.createObjectURL(imageFile) : "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500"
+    };
+    setProducts([newP, ...products]);
     setForm({ name: "", price: "", category: "T-Shirts", stock: "20" });
     setImageFile(null);
-    fetchAll();
     setActiveTab("products");
   };
 
-  const handleDelete = async (id) => {
-    await fetch("http://localhost:5000/api/products/" + id, { method: "DELETE" });
-    fetchAll();
+  const handleDelete = (id) => {
+    setProducts(products.filter(p => p.id !== id));
   };
 
   const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
@@ -86,8 +115,8 @@ export default function ShopCoAdmin() {
             <p className="text-xs text-slate-400">Manage your e-commerce store inventory & sales</p>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full">● Online</span>
-            <div className="w-10 h-10 rounded-full bg-indigo-600 text-white font-bold flex items-center font-sm justify-center">AK</div>
+            <span className="text-xs font-semibold px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full">● Live</span>
+            <div className="w-10 h-10 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-sm">AK</div>
           </div>
         </div>
 
@@ -121,9 +150,9 @@ export default function ShopCoAdmin() {
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
               <h3 className="font-bold text-slate-800 mb-4">Latest SHOP.CO Inventory</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                {products.slice(0, 4).map(p => (
+                {products.map(p => (
                   <div key={p.id} className="border border-slate-100 rounded-xl p-3 flex flex-col justify-between bg-slate-50/50">
-                    <img src={p.image} alt={p.name} className="w-full h-32 object-cover rounded-lg mb-2" />
+                    <img src={p.image} alt={p.name} className="w-full h-36 object-cover rounded-lg mb-2" />
                     <h4 className="font-bold text-sm text-slate-800 truncate">{p.name}</h4>
                     <p className="text-indigo-600 font-extrabold text-sm mt-1">${p.price}</p>
                   </div>
@@ -180,7 +209,7 @@ export default function ShopCoAdmin() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-semibold text-slate-600">Price ($) </label>
+                  <label className="text-xs font-semibold text-slate-600">Price ($)</label>
                   <input required type="number" value={form.price} onChange={e => setForm({...form, price: e.target.value})} placeholder="120" className="w-full mt-1 p-3 border rounded-xl text-sm outline-indigo-500" />
                 </div>
                 <div>
